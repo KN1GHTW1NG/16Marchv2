@@ -183,21 +183,23 @@ function update(dt) {
   const feetX2 = player.x + player.w - 10;
 
   for (const p of platforms) {
-    const px1 = p.x;
-    const px2 = p.x + p.w;
+  const px1 = p.x;
+  const px2 = p.x + p.w;
 
-    const overlap = feetX2 > px1 && feetX1 < px2;
-    if (!overlap) continue;
+  const overlap = feetX2 > px1 && feetX1 < px2;
+  if (!overlap) continue;
 
-    const top = groundY;
+  const top = groundY;
+  const feetY = player.y + player.h;
+  const prevFeetY = (player.y - player.vy * dt) + player.h;
 
-    const feetY = player.y + player.h;
-    if (feetY >= top && feetY <= top + 40 && player.vy >= 0) {
-      player.y = top - player.h;
-      player.vy = 0;
-      player.grounded = true;
-    }
+  // land only if crossing the top from above
+  if (prevFeetY <= top && feetY >= top && player.vy >= 0) {
+    player.y = top - player.h;
+    player.vy = 0;
+    player.grounded = true;
   }
+}
 
   // ✅ FALL INTO PIT -> RESET
   if (player.y > H + 250) respawn();
