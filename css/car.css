@@ -1,0 +1,58 @@
+body {
+  margin: 0;
+  background: linear-gradient(#FFB6C1, #F8C8DC);
+  font-family: sans-serif;
+  text-align: center;
+  overflow: hidden;
+}
+
+.game-container {
+  max-width: 430px;
+  margin: auto;
+  padding-top: 10px;
+}
+
+.title {
+  color: #AA336A;
+  margin-bottom: 10px;
+}
+
+.progress-bar {
+  width: 90%;
+  height: 12px;
+  background: #fff;
+  border-radius: 10px;
+  margin: 0 auto 10px;
+  overflow: hidden;
+}
+
+#progressFill {
+  height: 100%;
+  width: 0%;
+  background: #AA336A;
+  transition: width 0.2s;
+}
+
+canvas {
+  background: #F8C8DC;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.controls {
+  margin-top: 10px;
+}
+
+button {
+  padding: 12px 24px;
+  margin: 5px;
+  border-radius: 30px;
+  border: none;
+  background: #AA336A;
+  color: white;
+  font-size: 18px;
+}
+
+.hidden {
+  display: none;
+}
