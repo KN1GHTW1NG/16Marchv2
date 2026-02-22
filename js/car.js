@@ -209,6 +209,7 @@ function drawObstacle(o){
 
 // ---- Game Loop ----
 let last=performance.now();
+let started = false;
 
 function loop(now){
   const dt=Math.min(0.033,(now-last)/1000);
