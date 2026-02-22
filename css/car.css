@@ -1,10 +1,8 @@
 :root{
-  --controlsH: 110px; /* space reserved for buttons */
-}
-:root {
-  --pink1: #FFB6C1;
-  --pink2: #F8C8DC;
-  --pink3: #AA336A;
+  --controlsH: 110px;
+  --pink1:#FFB6C1;
+  --pink2:#F8C8DC;
+  --pink3:#AA336A;
 }
 
 * { box-sizing: border-box; }
@@ -72,6 +70,7 @@ html, body {
 }
 
 canvas {
+  pointer-events: none;
   width: 100%;
   max-width: 420px;
   height: 100%;
@@ -83,6 +82,7 @@ canvas {
 }
 
 .controls {
+  pointer-events: auto;
   position: fixed;
   left: 0;
   right: 0;
