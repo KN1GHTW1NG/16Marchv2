@@ -11,156 +11,178 @@ const jumpBtn = document.getElementById("jumpBtn");
 const winBox = document.getElementById("winBox");
 const continueBtn = document.getElementById("continueBtn");
 
-let W=0,H=0,DPR=1;
+let W,H;
 
 function resize(){
-  DPR=Math.min(2,window.devicePixelRatio||1);
-  const cssW=Math.min(420,window.innerWidth-20);
-  const cssH=window.innerHeight*0.75;
-  canvas.style.width=cssW+"px";
-  canvas.style.height=cssH+"px";
-  canvas.width=cssW*DPR;
-  canvas.height=cssH*DPR;
-  ctx.setTransform(DPR,0,0,DPR,0,0);
-  W=cssW; H=cssH;
-}
-window.addEventListener("resize",resize);
+  const cssW = Math.min(420, window.innerWidth-20);
+  const cssH = window.innerHeight*0.75;
 
+  canvas.width = cssW;
+  canvas.height = cssH;
+
+  W = cssW;
+  H = cssH;
+
+  groundY = H - 140;
+}
+window.addEventListener("resize", resize);
 resize();
 
-// ---- Physics ----
-const gravity=2200;
-const moveSpeed=340;
-const jumpPower=820;
 
-const player={
-  x:100,
-  y:0,
-  w:80,    // BIGGER character
-  h:110,
-  vx:0,
-  vy:0,
+// ---------------- IMAGES ----------------
+const playerImg = new Image();
+playerImg.src = "assets/IMG_2114.png";
+
+const carImg = new Image();
+carImg.src = "assets/IMG_2121.png";
+
+let carHeight = 100;
+
+carImg.onload = () => {
+  const scale = 150 / carImg.width;
+  carHeight = carImg.height * scale;
+};
+
+
+// ---------------- PHYSICS ----------------
+const gravity = 2000;
+const speed = 350;
+const jumpPower = 900;
+
+const player = {
+  x: 80,
+  y: 0,
+  w: 90,    // bigger
+  h: 130,
+  vx: 0,
+  vy: 0,
   grounded:false
 };
 
-const playerImg=new Image();
-playerImg.src="assets/IMG_2114.png";
+let groundY = H - 140;
 
-const carImg=new Image();
-carImg.src="assets/IMG_2121.png";
 
-let groundY=H-140;
-
-// ---- Level ----
-let platforms=[];
-let crates=[];
-let goal={x:2000,y:0,w:150,h:0};
+// ---------------- LEVEL ----------------
+let platforms = [];
+let crates = [];
+let goalX = 2400;
 
 function buildLevel(){
-  groundY=H-140;
-  platforms=[
-    {x:0,w:400},
-    {x:550,w:300},
-    {x:1000,w:350},
-    {x:1500,w:300},
-    {x:1900,w:350}
+  platforms = [
+    {x:0, y:groundY, w:500, h:40},
+    {x:700, y:groundY-80, w:200, h:40},   // elevated ledge
+    {x:1100, y:groundY, w:400, h:40},
+    {x:1700, y:groundY-100, w:220, h:40}, // higher ledge
+    {x:2100, y:groundY, w:500, h:40}
   ];
 
-  crates=[
-    {x:650,y:groundY-50,w:50,h:50},
-    {x:1120,y:groundY-50,w:50,h:50},
-    {x:1700,y:groundY-50,w:50,h:50}
+  crates = [
+    {x:820, y:groundY-130, w:60, h:60},
+    {x:1200, y:groundY-60, w:60, h:60},
+    {x:1820, y:groundY-160, w:60, h:60}
   ];
-
-  goal.y=groundY;
-  goal.h=carImg.height?carImg.height*(goal.w/carImg.width):90;
 }
-
 buildLevel();
 
-// ---- Controls ----
-const keys={};
-document.addEventListener("keydown",e=>{
-  if(e.key==="ArrowLeft"||e.key==="a")keys.left=true;
-  if(e.key==="ArrowRight"||e.key==="d")keys.right=true;
-  if(e.key==="ArrowUp"||e.key===" ")keys.jump=true;
+
+// ---------------- CONTROLS ----------------
+const keys = {};
+
+document.addEventListener("keydown", e=>{
+  if(e.key==="ArrowLeft"||e.key==="a") keys.left=true;
+  if(e.key==="ArrowRight"||e.key==="d") keys.right=true;
+  if(e.key==="ArrowUp"||e.key===" ") keys.jump=true;
 });
-document.addEventListener("keyup",e=>{
-  if(e.key==="ArrowLeft"||e.key==="a")keys.left=false;
-  if(e.key==="ArrowRight"||e.key==="d")keys.right=false;
-  if(e.key==="ArrowUp"||e.key===" ")keys.jump=false;
+
+document.addEventListener("keyup", e=>{
+  if(e.key==="ArrowLeft"||e.key==="a") keys.left=false;
+  if(e.key==="ArrowRight"||e.key==="d") keys.right=false;
+  if(e.key==="ArrowUp"||e.key===" ") keys.jump=false;
 });
 
 leftBtn.onpointerdown=()=>keys.left=true;
 leftBtn.onpointerup=()=>keys.left=false;
+
 rightBtn.onpointerdown=()=>keys.right=true;
 rightBtn.onpointerup=()=>keys.right=false;
+
 jumpBtn.onpointerdown=()=>{
   if(player.grounded){
-    player.vy=-jumpPower;
-    player.grounded=false;
+    player.vy = -jumpPower;
+    player.grounded = false;
   }
 };
 
-// ---- Game Loop ----
-let cameraX=0;
+
+// ---------------- GAME LOOP ----------------
+let cameraX = 0;
 
 function update(dt){
 
-  // movement
-  if(keys.left) player.vx=-moveSpeed;
-  else if(keys.right) player.vx=moveSpeed;
-  else player.vx*=0.85;
+  // Horizontal movement
+  if(keys.left) player.vx = -speed;
+  else if(keys.right) player.vx = speed;
+  else player.vx *= 0.85;
 
+  // Jump
   if(keys.jump && player.grounded){
-    player.vy=-jumpPower;
-    player.grounded=false;
+    player.vy = -jumpPower;
+    player.grounded = false;
   }
 
-  player.vy+=gravity*dt;
+  player.vy += gravity*dt;
 
-  player.x+=player.vx*dt;
-  player.y+=player.vy*dt;
+  player.x += player.vx*dt;
+  player.y += player.vy*dt;
 
-  // ground collision
-  player.grounded=false;
+  player.grounded = false;
 
+  // Platform collisions
   for(let p of platforms){
-    if(player.x+player.w>p.x && player.x<p.x+p.w){
-      if(player.y+player.h>=groundY && player.y+player.h<=groundY+40){
-        player.y=groundY-player.h;
-        player.vy=0;
-        player.grounded=true;
-      }
+    if(player.x + player.w > p.x &&
+       player.x < p.x + p.w &&
+       player.y + player.h > p.y &&
+       player.y + player.h < p.y + 50 &&
+       player.vy >= 0){
+
+        player.y = p.y - player.h;
+        player.vy = 0;
+        player.grounded = true;
     }
   }
 
-  // crates collision
+  // Crate collisions (standable)
   for(let c of crates){
-    if(player.x+player.w>c.x && player.x<c.x+c.w &&
-       player.y+player.h>c.y && player.y<c.y+c.h){
-        player.x-=player.vx*dt; // simple stop
+    if(player.x + player.w > c.x &&
+       player.x < c.x + c.w &&
+       player.y + player.h > c.y &&
+       player.y + player.h < c.y + 50 &&
+       player.vy >= 0){
+
+        player.y = c.y - player.h;
+        player.vy = 0;
+        player.grounded = true;
     }
   }
 
-  // fall reset
-  if(player.y>H+200){
-    player.x=100;
-    player.y=0;
-    player.vy=0;
+  // Falling reset
+  if(player.y > H + 200){
+    player.x = 80;
+    player.y = 0;
+    player.vy = 0;
   }
 
-  // win
-  if(player.x+player.w>goal.x){
+  // Win
+  if(player.x > goalX){
     winBox.classList.remove("hidden");
   }
 
-  // progress
-  const progress=Math.min(player.x/goal.x,1);
-  progressFill.style.width=(progress*100)+"%";
-  percentEl.textContent=Math.floor(progress*100)+"%";
+  // Progress
+  const progress = Math.min(player.x/goalX,1);
+  progressFill.style.width = (progress*100)+"%";
+  percentEl.textContent = Math.floor(progress*100)+"%";
 
-  cameraX=player.x-150;
+  cameraX = player.x - 150;
 }
 
 function draw(){
@@ -169,33 +191,30 @@ function draw(){
   ctx.save();
   ctx.translate(-cameraX,0);
 
-  // ground
+  // Sky
+  ctx.fillStyle="#87CEEB";
+  ctx.fillRect(0,0,4000,H);
+
+  // Platforms
   ctx.fillStyle="#3CB371";
   for(let p of platforms){
-    ctx.fillRect(p.x,groundY,p.w,H-groundY);
+    ctx.fillRect(p.x,p.y,p.w,p.h);
   }
 
-  // pits visual
-  ctx.fillStyle="#5c3d2e";
-  ctx.fillRect(400,groundY,150,H-groundY);
-  ctx.fillRect(850,groundY,150,H-groundY);
-  ctx.fillRect(1350,groundY,150,H-groundY);
-
-  // crates
+  // Crates
   ctx.fillStyle="#8B4513";
   for(let c of crates){
     ctx.fillRect(c.x,c.y,c.w,c.h);
   }
 
-  // car
+  // Car (fixed ratio)
   if(carImg.complete){
-    const carH=carImg.height*(goal.w/carImg.width);
-    ctx.drawImage(carImg,goal.x,groundY-carH,goal.w,carH);
+    ctx.drawImage(carImg, goalX, groundY-carHeight, 150, carHeight);
   }
 
-  // player
+  // Player
   if(playerImg.complete){
-    ctx.drawImage(playerImg,player.x,player.y,player.w,player.h);
+    ctx.drawImage(playerImg, player.x, player.y, player.w, player.h);
   }
 
   ctx.restore();
