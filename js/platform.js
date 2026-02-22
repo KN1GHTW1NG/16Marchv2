@@ -1,17 +1,17 @@
 const canvas = document.getElementById("cv");
+if (!canvas) {
+  alert("Canvas not found. Expected <canvas id='cv'>");
+  throw new Error("Canvas #cv missing");
+}
 const ctx = canvas.getContext("2d");
-let W = 0;
-let H = 0;
-let DPR = 1;
+if (!ctx) {
+  alert("2D context failed. Canvas exists but ctx is null.");
+  throw new Error("No 2D context");
+}
 
-function resize() {
-  DPR = Math.max(1, Math.min(3, window.devicePixelRatio || 1));
-
-  const cssW = Math.min(420, window.innerWidth - 20);
-  const cssH = Math.min(window.innerHeight * 0.78, 780);
-
-  canvas.style.width = cssW + "px";
-  canvas.style.height = cssH + "px";
+// 🔥 Immediate visible proof JS is running:
+ctx.fillStyle = "#ff00ff";
+ctx.fillRect(0, 0, 30, 30);
 
   canvas.width = cssW * DPR;
   canvas.height = cssH * DPR;
