@@ -9,8 +9,10 @@
 html, body {
   margin: 0;
   height: 100%;
+  overflow: hidden;                 /* stops scrolling */
   font-family: system-ui;
   background: linear-gradient(180deg, var(--pink2), var(--pink1));
+  -webkit-text-size-adjust: 100%;
 }
 
 .app {
