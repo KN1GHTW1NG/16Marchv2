@@ -1,24 +1,43 @@
+// --- On-page error reporting (so Safari can’t hide the truth) ---
+const jsBadge = document.getElementById("jsBadge");
+const errBox = document.getElementById("errBox");
+
+window.addEventListener("error", (e) => {
+  errBox.classList.remove("hidden");
+  errBox.textContent = "JS ERROR:\n" + (e.message || "unknown") + "\n" + (e.filename || "") + ":" + (e.lineno || "");
+  jsBadge.textContent = "JS: ERROR";
+});
+
+function setBadgeOk() {
+  jsBadge.textContent = "JS: LOADED ✅";
+  jsBadge.style.background = "rgba(0,184,148,.14)";
+  jsBadge.style.color = "rgba(0,110,90,.95)";
+}
+
 const canvas = document.getElementById("cv");
+if (!canvas) throw new Error("Canvas #cv not found");
 const ctx = canvas.getContext("2d");
+if (!ctx) throw new Error("Canvas 2D context failed");
 
 // HUD
 const fillEl = document.getElementById("fill");
 const pctEl = document.getElementById("pct");
 const mEl = document.getElementById("m");
 
-// Buttons
+// Controls
 const leftBtn = document.getElementById("leftBtn");
 const rightBtn = document.getElementById("rightBtn");
 const jumpBtn = document.getElementById("jumpBtn");
+
+const winOverlay = document.getElementById("win");
 const replayBtn = document.getElementById("replay");
 const continueBtn = document.getElementById("continue");
-const winOverlay = document.getElementById("win");
 
-let W = 0;
-let H = 0;
-let DPR = 1;
+setBadgeOk();
 
-// ---------------- RESIZE (important) ----------------
+// --- Canvas sizing (DPR) ---
+let W = 0, H = 0, DPR = 1;
+
 function resize() {
   DPR = Math.max(1, Math.min(3, window.devicePixelRatio || 1));
 
@@ -41,7 +60,7 @@ function resize() {
 }
 window.addEventListener("resize", resize);
 
-// ---------------- PHYSICS ----------------
+// --- Physics ---
 const gravity = 2200;
 const moveSpeed = 320;
 const jumpForce = 780;
@@ -49,31 +68,21 @@ const friction = 0.85;
 
 const keys = { left:false, right:false, jump:false };
 
-const player = {
-  x: 80,
-  y: 0,
-  w: 90,
-  h: 135,
-  vx: 0,
-  vy: 0,
-  grounded: false
-};
+const player = { x:80, y:0, w:90, h:135, vx:0, vy:0, grounded:false };
 
-// ---------------- CHARACTER IMAGE ----------------
+// --- Character image (your link kept exactly) ---
 const playerImg = new Image();
 playerImg.src = "https://github.com/KN1GHTW1NG/16March/raw/refs/heads/main/assets/IMG_2114.png";
-
 let imgReady = false;
 playerImg.onload = () => (imgReady = true);
 
-// ---------------- LEVEL ----------------
+// --- Level ---
 let groundY = 0;
 let platforms = [];
-let levelEndX = 0;
+const goal = { x: 2050, w: 120, h: 80 };
 
 function buildLevel() {
   groundY = H - 140;
-
   platforms = [
     { x: 0, width: 300 },
     { x: 380, width: 260 },
@@ -82,16 +91,9 @@ function buildLevel() {
     { x: 1400, width: 260 },
     { x: 1740, width: 320 }
   ];
-
-  // end of level for progress calculation
-  const last = platforms[platforms.length - 1];
-  levelEndX = last.x + last.width;
 }
 
-// Goal Car placeholder
-const goal = { x: 2050, w: 120, h: 80 };
-
-// ---------------- INPUT ----------------
+// --- Keyboard input ---
 document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowLeft" || e.key === "a") keys.left = true;
   if (e.key === "ArrowRight" || e.key === "d") keys.right = true;
@@ -103,6 +105,7 @@ document.addEventListener("keyup", (e) => {
   if (e.key === " " || e.key === "ArrowUp") keys.jump = false;
 });
 
+// --- Touch D-pad (hold, not sticky) ---
 function hold(btn, down, up) {
   if (!btn) return;
   btn.addEventListener("pointerdown", (e)=>{ e.preventDefault(); down(); });
@@ -124,7 +127,7 @@ if (jumpBtn) {
   });
 }
 
-// ---------------- GAME LOOP ----------------
+// --- Game loop ---
 let cameraX = 0;
 let last = performance.now();
 let finished = false;
@@ -154,27 +157,23 @@ function loop(now) {
 function update(dt) {
   if (finished) return;
 
-  // Horizontal
   if (keys.left) player.vx = -moveSpeed;
   else if (keys.right) player.vx = moveSpeed;
   else player.vx *= friction;
 
-  // Jump
   if (keys.jump && player.grounded) {
     player.vy = -jumpForce;
     player.grounded = false;
   }
 
-  // Gravity
   player.vy += gravity * dt;
 
-  // Apply movement
   player.x += player.vx * dt;
   player.y += player.vy * dt;
 
   player.grounded = false;
 
-  // Platform collision (ground segments only)
+  // Stand on platforms (ground segments)
   for (let p of platforms) {
     if (
       player.x + player.w > p.x &&
@@ -189,10 +188,9 @@ function update(dt) {
     }
   }
 
-  // Fall reset (pits)
+  // Pits reset
   if (player.y > H + 200) respawn();
 
-  // Camera follow
   cameraX = player.x - 150;
 
   // Win
@@ -208,14 +206,16 @@ function updateHUD() {
   const prog = Math.max(0, Math.min(1, player.x / (goal.x + 200)));
   fillEl.style.width = (prog * 100).toFixed(0) + "%";
   pctEl.textContent = Math.floor(prog * 100) + "%";
-
-  // fake “meters” for vibe
-  const meters = Math.floor(player.x / 10);
-  mEl.textContent = meters + "m";
+  mEl.textContent = Math.floor(player.x / 10) + "m";
 }
 
 function draw() {
+  // If you still see white, JS isn’t running or is erroring (errBox will show)
   ctx.clearRect(0, 0, W, H);
+
+  // Instant proof draw is running: small magenta square
+  ctx.fillStyle = "#ff00ff";
+  ctx.fillRect(8, 8, 18, 18);
 
   // Sky
   ctx.fillStyle = "#87CEEB";
@@ -224,13 +224,13 @@ function draw() {
   ctx.save();
   ctx.translate(-cameraX, 0);
 
-  // Ground blocks
+  // Ground
   ctx.fillStyle = "#3CB371";
   for (let p of platforms) {
     ctx.fillRect(p.x, groundY, p.width, 140);
   }
 
-  // Goal placeholder (we’ll swap to car PNG later)
+  // Goal placeholder
   ctx.fillStyle = "pink";
   ctx.fillRect(goal.x, groundY - goal.h, goal.w, goal.h);
 
@@ -247,9 +247,7 @@ function drawPlayer() {
     return;
   }
 
-  // Preserve PNG ratio without squish
   const ratio = playerImg.width / playerImg.height;
-
   const drawH = player.h;
   const drawW = drawH * ratio;
 
@@ -266,6 +264,6 @@ continueBtn?.addEventListener("click", () => {
   window.location.href = "cargame.html";
 });
 
-// ---------------- INIT ----------------
+// INIT
 resize();
 requestAnimationFrame(loop);
