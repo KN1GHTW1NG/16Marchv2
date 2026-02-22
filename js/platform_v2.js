@@ -73,7 +73,7 @@ let clouds = [];
 let ledges = [];
 let crates = [];
 
-const goal = { x: 3050, w: 150 }; // width fixed; height from aspect ratio
+const goal = { x: 3500, w: 150 }; // width fixed; height from aspect ratio
 
 function buildLevel() {
   groundY = H - 140;
