@@ -22,11 +22,7 @@ function resize() {
 
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
 }
-window.addEventListener("resize", () => {
-  resize();
-  buildLevel();
-  player.y = H - 140 - player.h;
-});
+window.addEventListener("resize", resize);
 
 // ---------------- PHYSICS ----------------
 
@@ -44,28 +40,20 @@ let keys = {
 const player = {
   x: 80,
   y: 0,
-  w: 90,      // already ~50% larger
-  h: 135,     // already ~50% larger
+  w: 90,      // 50% larger
+  h: 135,     // 50% larger
   vx: 0,
   vy: 0,
   grounded: false
 };
 
-// ---------------- CHARACTER IMAGE (LOCAL) ----------------
+// ---------------- CHARACTER IMAGE ----------------
 
 const playerImg = new Image();
-playerImg.src = "assets/IMG_2114.png";
+playerImg.src = "https://github.com/KN1GHTW1NG/16March/raw/refs/heads/main/assets/IMG_2114.png";
 
 let imgReady = false;
-playerImg.onload = () => (imgReady = true);
-
-// ---------------- CAR IMAGE (LOCAL) ----------------
-
-const carImg = new Image();
-carImg.src = "assets/IMG_2121.png";
-
-let carReady = false;
-carImg.onload = () => (carReady = true);
+playerImg.onload = () => imgReady = true;
 
 // ---------------- LEVEL ----------------
 
@@ -85,10 +73,11 @@ function buildLevel() {
   ];
 }
 
-// Goal car (we'll draw PNG with preserved ratio)
+// Goal Car (placeholder box)
 const goal = {
   x: 2050,
-  w: 150 // car width on screen (tweak if you want bigger/smaller)
+  w: 120,
+  h: 80
 };
 
 // ---------------- CONTROLS ----------------
@@ -110,24 +99,14 @@ const leftBtn = document.getElementById("leftBtn");
 const rightBtn = document.getElementById("rightBtn");
 const jumpBtn = document.getElementById("jumpBtn");
 
-if (leftBtn) {
-  leftBtn.onpointerdown = () => (keys.left = true);
-  leftBtn.onpointerup = () => (keys.left = false);
-  leftBtn.onpointerleave = () => (keys.left = false);
-}
-if (rightBtn) {
-  rightBtn.onpointerdown = () => (keys.right = true);
-  rightBtn.onpointerup = () => (keys.right = false);
-  rightBtn.onpointerleave = () => (keys.right = false);
-}
-if (jumpBtn) {
-  jumpBtn.onpointerdown = () => {
-    if (player.grounded) {
-      player.vy = -jumpForce;
-      player.grounded = false;
-    }
-  };
-}
+if (leftBtn) leftBtn.onclick = () => keys.left = true;
+if (rightBtn) rightBtn.onclick = () => keys.right = true;
+if (jumpBtn) jumpBtn.onclick = () => {
+  if (player.grounded) {
+    player.vy = -jumpForce;
+    player.grounded = false;
+  }
+};
 
 // ---------------- GAME LOOP ----------------
 
@@ -145,6 +124,7 @@ function loop(now) {
 }
 
 function update(dt) {
+
   // Horizontal
   if (keys.left) player.vx = -moveSpeed;
   else if (keys.right) player.vx = moveSpeed;
@@ -190,7 +170,7 @@ function update(dt) {
   // Camera follow
   cameraX = player.x - 150;
 
-  // Win (touch/enter car zone)
+  // Win
   if (player.x > goal.x) {
     window.location.href = "cargame.html";
   }
@@ -212,8 +192,9 @@ function draw() {
     ctx.fillRect(p.x, groundY, p.width, 140);
   }
 
-  // Goal car PNG (preserve ratio + sit on ground)
-  drawCar();
+  // Goal car placeholder
+  ctx.fillStyle = "pink";
+  ctx.fillRect(goal.x, groundY - goal.h, goal.w, goal.h);
 
   // Player
   drawPlayer();
@@ -224,44 +205,35 @@ function draw() {
 // ---- Clean Drawing (No Halo / No Crop) ----
 
 function drawPlayer() {
+
   if (!imgReady) {
     ctx.fillStyle = "red";
     ctx.fillRect(player.x, player.y, player.w, player.h);
     return;
   }
 
-  // Preserve real PNG ratio: lock height, width follows ratio => never squished
   const ratio = playerImg.width / playerImg.height;
 
-  const drawH = player.h;          // lock height
-  const drawW = drawH * ratio;     // width follows ratio
+  let drawH = player.h;
+  let drawW = drawH * ratio;
 
-  const x = Math.round(player.x + player.w / 2 - drawW / 2); // center sprite
+  if (drawW > player.w) {
+    drawW = player.w;
+    drawH = drawW / ratio;
+  }
+
+  const x = Math.round(player.x);
   const y = Math.round(player.y);
 
   ctx.imageSmoothingEnabled = false;
-  ctx.drawImage(playerImg, x, y, Math.round(drawW), Math.round(drawH));
-}
 
-function drawCar() {
-  if (!carReady) {
-    // fallback box if image not loaded yet
-    ctx.fillStyle = "pink";
-    ctx.fillRect(goal.x, groundY - 80, goal.w, 80);
-    return;
-  }
-
-  // Preserve car ratio and place it so its bottom touches groundY
-  const ratio = carImg.width / carImg.height;
-
-  const drawW = goal.w;
-  const drawH = drawW / ratio;
-
-  const x = Math.round(goal.x);
-  const y = Math.round(groundY - drawH);
-
-  ctx.imageSmoothingEnabled = false;
-  ctx.drawImage(carImg, x, y, Math.round(drawW), Math.round(drawH));
+  ctx.drawImage(
+    playerImg,
+    x,
+    y,
+    Math.round(drawW),
+    Math.round(drawH)
+  );
 }
 
 // ---------------- INIT ----------------
