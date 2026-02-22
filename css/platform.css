@@ -27,11 +27,6 @@ body{
   box-shadow:0 15px 40px rgba(0,0,0,.15);
 }
 
-.caption{
-  font-size:13px;
-  color:var(--pink3);
-}
-
 .progress{
   height:10px;
   background:#eee;
@@ -66,21 +61,31 @@ canvas{
   max-width:420px;
   height:100%;
   border-radius:20px;
-  background:linear-gradient(#87CEEB,#dff6ff);
+  background:linear-gradient(#87CEEB,#EAF8FF);
   box-shadow:0 25px 60px rgba(0,0,0,.25);
 }
 
+/* ---- Controls Layout ---- */
 .controls{
   display:flex;
-  justify-content:center;
-  gap:20px;
-  padding:8px 0;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 15px;
+}
+
+.left-controls{
+  display:flex;
+  gap:15px;
+}
+
+.right-controls{
+  display:flex;
 }
 
 .control-btn{
-  width:70px;
-  height:70px;
-  border-radius:20px;
+  width:75px;
+  height:75px;
+  border-radius:18px;
   border:none;
   font-size:18px;
   font-weight:bold;
@@ -91,7 +96,7 @@ canvas{
 }
 
 .control-btn:active{
-  transform:translateY(3px);
+  transform:translateY(4px);
 }
 
 .jump{
