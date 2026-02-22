@@ -446,57 +446,38 @@ continueBtn?.addEventListener("click", () => {
   window.location.href = "cargame.html";
 });
 
-// ---------------- SIMPLE 10 SECOND COUNTDOWN ----------------
-
-const loadingEl = document.getElementById("loading");
-const loadPctEl = document.getElementById("loadPct");
+// ---------------- CLEAN SMOOTH 10 SECOND COUNTDOWN ----------------
 
 resize();
 
-// ---------------- SMOOTH 10 SECOND COUNTDOWN ----------------
+window.addEventListener("load", function() {
 
-const loadingEl = document.getElementById("loading");
-const loadPctEl = document.getElementById("loadPct");
-const loadFillEl = document.getElementById("loadFill");
+  const loadingEl = document.getElementById("loading");
+  const loadPctEl = document.getElementById("loadPct");
+  const loadFillEl = document.getElementById("loadFill");
 
-resize();
+  const totalTime = 10000;
+  const startTime = Date.now();
 
-const totalTime = 10000; // 10 seconds
-const startTime = Date.now();
+  if (loadingEl) loadingEl.classList.remove("hidden");
 
-if (loadingEl) loadingEl.classList.remove("hidden");
+  const timer = setInterval(function() {
 
-const timer = setInterval(() => {
-  const elapsed = Date.now() - startTime;
-  const remaining = Math.max(0, totalTime - elapsed);
+    const elapsed = Date.now() - startTime;
+    const remaining = Math.max(0, totalTime - elapsed);
 
-  const seconds = Math.ceil(remaining / 1000);
-  const progress = Math.min(1, elapsed / totalTime);
+    const seconds = Math.ceil(remaining / 1000);
+    const progress = Math.min(1, elapsed / totalTime);
 
-  if (loadPctEl) loadPctEl.textContent = seconds + "s";
-  if (loadFillEl) loadFillEl.style.width = (progress * 100) + "%";
+    if (loadPctEl) loadPctEl.textContent = seconds + "s";
+    if (loadFillEl) loadFillEl.style.width = (progress * 100) + "%";
 
-  if (elapsed >= totalTime) {
-    clearInterval(timer);
-    if (loadingEl) loadingEl.classList.add("hidden");
-    requestAnimationFrame(loop);
-  }
-}, 30);;
+    if (elapsed >= totalTime) {
+      clearInterval(timer);
+      if (loadingEl) loadingEl.classList.add("hidden");
+      requestAnimationFrame(loop);
+    }
 
-if (loadingEl) loadingEl.classList.remove("hidden");
-if (loadPctEl) loadPctEl.textContent = countdown + "s";
+  }, 30);
 
-const countdownTimer = setInterval(() => {
-  countdown--;
-
-  if (loadPctEl) loadPctEl.textContent = countdown + "s";
-
-  if (countdown <= 0) {
-    clearInterval(countdownTimer);
-
-    if (loadingEl) loadingEl.classList.add("hidden");
-
-    requestAnimationFrame(loop);
-  }
-}, 1000);
-  
+});
