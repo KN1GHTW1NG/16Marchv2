@@ -489,13 +489,67 @@ function preloadImages(list) {
 }
 
 // Show loading
+// --- LOADING OVERLAY + ROBUST ASSET PRELOAD (polling + timeout) ---
+const loadingEl = document.getElementById("loading");
+const loadFillEl = document.getElementById("loadFill");
+const loadPctEl  = document.getElementById("loadPct");
+
+// IMPORTANT: these must exist in your file already
+// const playerImg = new Image(...)
+// const carImg = new Image(...)
+
+const assetsToLoad = [playerImg, carImg].filter(Boolean);
+
+function isReady(img) {
+  // naturalWidth>0 = successfully decoded image
+  return !!(img && img.complete && img.naturalWidth > 0);
+}
+
+function startGame() {
+  if (loadingEl) loadingEl.classList.add("hidden");
+  requestAnimationFrame(loop);
+}
+
+function setProgress(pct) {
+  const v = Math.max(0, Math.min(100, Math.round(pct)));
+  if (loadFillEl) loadFillEl.style.width = v + "%";
+  if (loadPctEl) loadPctEl.textContent = v + "%";
+}
+
+// Show loading immediately
 if (loadingEl) loadingEl.classList.remove("hidden");
 
-// Wait then start game loop
-preloadImages(assetsToLoad).then(() => {
-  // small delay makes it feel smoother
-  setTimeout(() => {
-    if (loadingEl) loadingEl.classList.add("hidden");
-    requestAnimationFrame(loop);
-  }, 250);
-});
+// If somehow no assets listed, don’t block
+if (assetsToLoad.length === 0) {
+  setProgress(100);
+  setTimeout(startGame, 150);
+} else {
+  const startTime = Date.now();
+  const TIMEOUT_MS = 7000; // never get stuck longer than this
+  const TICK_MS = 60;
+
+  const timer = setInterval(() => {
+    const readyCount = assetsToLoad.reduce((n, img) => n + (isReady(img) ? 1 : 0), 0);
+    const pct = (readyCount / assetsToLoad.length) * 100;
+
+    // Smooth-ish “cat loading” feel
+    const elapsed = Date.now() - startTime;
+    const softCap = Math.min(95, (elapsed / TIMEOUT_MS) * 95);
+    setProgress(Math.max(pct, softCap));
+
+    // All ready -> go
+    if (readyCount === assetsToLoad.length) {
+      clearInterval(timer);
+      setProgress(100);
+      setTimeout(startGame, 200);
+      return;
+    }
+
+    // Timeout -> proceed anyway (prevents permanent stuck)
+    if (elapsed >= TIMEOUT_MS) {
+      clearInterval(timer);
+      setProgress(100);
+      setTimeout(startGame, 200);
+    }
+  }, TICK_MS);
+}
