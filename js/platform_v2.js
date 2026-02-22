@@ -217,7 +217,54 @@ function update(dt) {
     player.grounded = true;
   }
 }
+// --- Ledge landing (mid-air platforms) ---
+for (const l of ledges) {
+  const px1 = l.x, px2 = l.x + l.w;
+  const overlap = feetX2 > px1 && feetX1 < px2;
+  if (!overlap) continue;
 
+  const top = l.y;
+  const feetY = player.y + player.h;
+  const prevFeetY = (player.y - player.vy * dt) + player.h;
+
+  if (prevFeetY <= top && feetY >= top && player.vy >= 0) {
+    player.y = top - player.h;
+    player.vy = 0;
+    player.grounded = true;
+  }
+}
+
+// --- Crate collisions (stand on top + basic side block) ---
+for (const c of crates) {
+  const px1 = c.x, px2 = c.x + c.w;
+  const py1 = c.y, py2 = c.y + c.h;
+
+  // AABB overlap test
+  const overlapX = player.x + player.w > px1 && player.x < px2;
+  const overlapY = player.y + player.h > py1 && player.y < py2;
+  if (!overlapX || !overlapY) continue;
+
+  const prevX = player.x - player.vx * dt;
+  const prevY = player.y - player.vy * dt;
+
+  // coming from above -> land on crate
+  const prevFeetY = prevY + player.h;
+  if (prevFeetY <= py1 && player.vy >= 0) {
+    player.y = py1 - player.h;
+    player.vy = 0;
+    player.grounded = true;
+    continue;
+  }
+
+  // basic left/right block
+  if (prevX + player.w <= px1) {
+    player.x = px1 - player.w;
+    player.vx = 0;
+  } else if (prevX >= px2) {
+    player.x = px2;
+    player.vx = 0;
+  }
+}
   // ✅ FALL INTO PIT -> RESET
   if (player.y > H + 250) respawn();
 
