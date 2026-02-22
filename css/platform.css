@@ -183,14 +183,26 @@ canvas{
   border: 1px solid rgba(0,0,0,.08);
 }
 
-.loadFill{
+..loadFill{
   height:100%;
   width:0%;
-  background: linear-gradient(90deg, #FFB6C1, #F8C8DC, #AA336A);
   border-radius:999px;
-  transition: width 120ms linear;
+  background: linear-gradient(
+    90deg,
+    #FFB6C1,
+    #F8C8DC,
+    #AA336A,
+    #FFB6C1
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+  transition: width 1s linear;
 }
 
+@keyframes shimmer{
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}
 .loadPct{
   font-weight:900;
   color: rgba(30,31,34,.7);
