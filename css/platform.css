@@ -183,10 +183,11 @@ canvas{
   border: 1px solid rgba(0,0,0,.08);
 }
 
-..loadFill{
+.loadFill{
   height:100%;
   width:0%;
   border-radius:999px;
+
   background: linear-gradient(
     90deg,
     #FFB6C1,
@@ -194,6 +195,17 @@ canvas{
     #AA336A,
     #FFB6C1
   );
+
+  background-size: 200% 100%;
+  animation: pinkFlow 3s linear infinite;
+
+  transition: width 0.3s linear;
+}
+
+@keyframes pinkFlow{
+  0%   { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}
   background-size: 200% 100%;
   animation: shimmer 3s linear infinite;
   transition: width 1s linear;
