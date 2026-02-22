@@ -208,3 +208,16 @@ canvas{
   0%   { background-position: 0% 0%; }
   100% { background-position: 200% 0%; }
 }
+/* ---- HARD STOP Safari text selection on controls ---- */
+.controls,
+.controls * {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.btn,
+.jump {
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
