@@ -212,8 +212,8 @@ let last=performance.now();
 let started = false;
 
 function loop(now){
-  const dt=Math.min(0.033,(now-last)/1000);
-  last=now;
+  const dt = Math.min(0.033,(now-last)/1000);
+  last = now;
 
   ctx.clearRect(0,0,W,H);
   drawBackground();
@@ -223,14 +223,51 @@ function loop(now){
 
     state.distance += dt*120;
     const progress = Math.min(state.distance/state.goal,1);
-    progressFill.style.width = progress*100+"%";
-    percentEl.textContent = Math.floor(progress*100)+"%";
+    progressFill.style.width = (progress*100) + "%";
+    percentEl.textContent = Math.floor(progress*100) + "%";
 
     state.spawnTimer += dt;
-    if(state.spawnTimer > 1.2){ // slightly spaced
-      state.spawnTimer=0;
+    if(state.spawnTimer > 1.2){
+      state.spawnTimer = 0;
       spawn();
     }
+
+    // Smooth lane movement (NO vibration / NO overshoot)
+    const target = laneCenters[state.lane];
+    const snap = 18;
+    state.x += (target - state.x) * Math.min(1, snap * dt);
+
+    obstacles.forEach(o => o.y += o.vy * dt);
+
+    for(const o of obstacles){
+      drawObstacle(o);
+    }
+
+    const playerBox = {
+      x: state.x - 35,
+      y: state.y + 20,
+      w: 70,
+      h: 100
+    };
+
+    for(const o of obstacles){
+      if(o.hitbox && hit(playerBox, o.hitbox)){
+        state.running = false;
+        gameOverEl.classList.remove("hidden");
+      }
+    }
+
+    if(progress >= 1){
+      state.won = true;
+      winEl.classList.remove("hidden");
+    }
+  }
+
+  drawPlayer();
+
+  // ✅ keep animating always
+  requestAnimationFrame(loop);
+}
 
     // Smooth lane movement (NO vibration / NO overshoot)
 const target = laneCenters[state.lane];
