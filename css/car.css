@@ -1,3 +1,6 @@
+:root{
+  --controlsH: 110px; /* space reserved for buttons */
+}
 :root {
   --pink1: #FFB6C1;
   --pink2: #F8C8DC;
@@ -16,12 +19,12 @@ html, body {
 }
 
 .app {
-  height: 100svh;
-  max-height: 100svh;
+  height: 100dvh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   padding: 10px;
-  gap: 10px;
+  padding-bottom: calc(var(--controlsH) + env(safe-area-inset-bottom));
 }
 
 .hud {
@@ -80,11 +83,23 @@ canvas {
 }
 
 .controls {
-  flex: 0 0 auto;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
   display: flex;
   justify-content: center;
   gap: 40px;
-  padding-bottom: calc(10px + env(safe-area-inset-bottom));
+
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  z-index: 999;
+
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  border-top: 1px solid rgba(0,0,0,0.06);
 }
 
 .control-btn {
@@ -160,4 +175,9 @@ canvas {
 @keyframes pinkFlow{
   0% { background-position: 0% 0%; }
   100% { background-position: 200% 0%; }
+}
+.controls, .controls * {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
