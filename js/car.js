@@ -271,6 +271,9 @@ if (!started) {
 
 
 restartBtn.onclick = resetGame;
+continueBtn.onclick = () => {
+  window.location.href = "color-pick.html"; // change later if needed
+};
 
 resize();
 computeRoad();
