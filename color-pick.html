@@ -1,0 +1,44 @@
+<!-- color-pick.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Tiny Color Test 🎨</title>
+  <link rel="stylesheet" href="css/color-pick.css?v=1" />
+</head>
+
+<body>
+  <div class="page">
+    <header class="card hud">
+      <div class="topRow">
+        <h1 class="title">Tiny Color Test 🎨</h1>
+        <div class="pill" id="streak">Streak: 0</div>
+      </div>
+
+      <div class="subtitle">
+        Pop the <b>REAL RED</b> blob. Not the “red” label 😼
+      </div>
+
+      <div class="bar">
+        <div class="barFill" id="fill"></div>
+      </div>
+      <div class="barPct" id="pct">0%</div>
+    </header>
+
+    <section class="card feedback">
+      <div class="avatar" aria-hidden="true">🐱</div>
+      <div class="speech" id="msg">Tap the blob that is actually <span class="redWord">RED</span>.</div>
+    </section>
+
+    <!-- THE PLAYGROUND (BLOBS LIVE HERE) -->
+    <main class="playField" id="playField" aria-label="color playground"></main>
+
+    <footer class="hint">
+      Tip: labels lie. Colors don’t.
+    </footer>
+  </div>
+
+  <script src="js/color-pick.js?v=1" defer></script>
+</body>
+</html>
