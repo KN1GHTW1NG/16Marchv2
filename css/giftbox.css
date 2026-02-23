@@ -306,7 +306,7 @@ html, body{
 .pill:active{ transform: translateY(2px); }
 
 .primary{
-  background: linear-gradient(180deg, #00b894, #00997a);
+  background: linear-gradient(180deg, #ff5fa2, #AA336A);
   color:#fff;
   border-color: rgba(0,0,0,.08);
 }
