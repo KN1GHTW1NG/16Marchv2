@@ -90,14 +90,39 @@ html, body{
   border: none;
   border-radius: 22px;
   min-height: 168px;
-
+  transform-style: preserve-3d;
+  background-clip: padding-box;
   box-shadow: 0 18px 42px rgba(0,0,0,.14);
   overflow: hidden;
 
   transform: translateY(0);
   transition: transform 180ms var(--spring), box-shadow 220ms var(--spring), filter 180ms var(--spring);
   cursor: pointer;
+/* 3D depth layer */
+.gift::after{
+  content:"";
+  position:absolute;
+  left: 10px;
+  right: 10px;
+  bottom: -14px;
+  height: 22px;
+  border-radius: 18px;
+  background: rgba(0,0,0,.18);
+  filter: blur(10px);
+  z-index: 0;
+  pointer-events:none;
+}
 
+/* Bring contents above depth layer */
+.gift > *{ position: relative; z-index: 1; }
+
+/* Hover lift (desktop) + gentle float (mobile-safe) */
+@media (hover:hover){
+  .gift:hover{
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 26px 60px rgba(0,0,0,.20);
+  }
+}
   user-select:none;
   -webkit-user-select:none;
   -webkit-touch-callout:none;
