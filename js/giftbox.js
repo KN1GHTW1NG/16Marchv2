@@ -181,8 +181,14 @@ wrongOk.addEventListener("click", () => {
 });
 
 continueBtn.addEventListener("click", () => {
-  // ✅ go to secret page
-  window.location.href = "secret.html";
+  // iOS: make sure AudioContext is awake on this tap too
+  ensureAudio();
+  playPop(); // little confirmation pop on Continue
+
+  // small delay so the pop plays before navigation
+  setTimeout(() => {
+    window.location.href = "secret.html";
+  }, 120);
 });
 
 gifts.forEach(btn => {
