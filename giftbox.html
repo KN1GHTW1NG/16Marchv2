@@ -1,27 +1,24 @@
-<base href="/16March/">
-<!-- index.html (Gift Box Page) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Pick the right gift 🎁</title>
-  <link rel="stylesheet" href="giftbox.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Pick the right gift</title>
+
+  <!-- keep these EXACT paths if your folders are /css and /js -->
+  <link rel="stylesheet" href="css/giftbox.css?v=1">
+  <script src="js/giftbox.js?v=1" defer></script>
 </head>
 <body>
 
   <div class="page">
-
     <header class="card header">
       <h1>Pick the right gift 🎁</h1>
       <p>Only one box knows your birthday. The others are… impostors.</p>
     </header>
 
-    <main class="grid" id="grid">
-      <!-- Boxes injected by JS -->
-    </main>
+    <main class="grid" id="grid"></main>
 
-    <!-- Toast / Hint -->
     <div class="toast hidden" id="toast">
       <div class="toast-inner">
         <div class="toast-title" id="toastTitle">Nope 😼</div>
@@ -29,9 +26,7 @@
         <button class="toast-btn" id="toastBtn">Okay</button>
       </div>
     </div>
-
   </div>
 
-  <script src="giftbox.js" defer></script>
 </body>
 </html>
