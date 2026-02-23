@@ -1,3 +1,4 @@
+document.documentElement.style.outline = "6px solid lime";
 // giftbox.js
 const grid = document.getElementById("grid");
 const toast = document.getElementById("toast");
