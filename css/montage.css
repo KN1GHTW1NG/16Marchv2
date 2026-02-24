@@ -237,6 +237,7 @@ body{
 .c4{ bottom:10px; right:10px; border-left:0; border-top:0; }
 
 /* ---------- Lanterns ---------- */
+/* ---------- Lanterns ---------- */
 .lantern-layer{
   position: absolute;
   inset: 0;
@@ -244,10 +245,45 @@ body{
   overflow:hidden;
 }
 
+/* ✅ REPLACE your .lantern block with this */
 .lantern{
   position:absolute;
   width: 86px;
   height: 120px;
+
+  /* JS-driven motion vars */
+  --tx: 0px;
+  --ty: 0px;
+  --rot: 0deg;
+  --scale: 1;
+
+  transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(var(--scale));
+  will-change: transform;
+
+  filter: drop-shadow(0 18px 22px rgba(0,0,0,.18));
+
+  /* ✅ Make them tappable even though layer is pointer-events:none */
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* Tap feedback */
+.lantern:active{
+  --scale: 0.98;
+}
+
+/* Focused lantern state (tap to toggle) */
+.lantern.isFocus{
+  z-index: 40;
+  --scale: 1.12;
+  filter: drop-shadow(0 24px 28px rgba(0,0,0,.24));
+}
+
+/* Optional: brighten glow when focused */
+.lantern.isFocus .glow{
+  opacity: 1;
+  filter: blur(2.4px);
+}
 
   /* ✅ stronger visibility everywhere (esp over white card) */
   filter: drop-shadow(0 18px 22px rgba(0,0,0,.24));
