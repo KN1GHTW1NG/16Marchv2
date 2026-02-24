@@ -303,16 +303,12 @@ body{
   position:absolute;
   inset:0;
   border-radius: 20px 20px 22px 22px;
-
   background:
-    /* wood grain vibe */
-    linear-gradient(180deg, #6b3f28, #3d2417),
-    repeating-linear-gradient(90deg,
-      rgba(255,255,255,.06) 0px,
-      rgba(255,255,255,.06) 2px,
-      rgba(0,0,0,0) 6px,
-      rgba(0,0,0,0) 12px
-    );
+    linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,0)),
+    radial-gradient(120% 100% at 50% 10%, rgba(255,255,255,.25), rgba(0,0,0,0));
+  border: 1px solid rgba(170,51,106,.22);
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,.18);
+}
   background-blend-mode: overlay;
 
   border: 1px solid rgba(20,10,6,.55);
