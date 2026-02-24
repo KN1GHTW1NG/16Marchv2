@@ -38,7 +38,7 @@ body{
   font-size: 30px;
   font-weight: 950;
   letter-spacing: -.02em;
-  animation: floatTitle 3.6s ease-in-out infinite;
+  
   text-shadow: 0 10px 26px rgba(0,0,0,.12);
 }
 .subtitle{
