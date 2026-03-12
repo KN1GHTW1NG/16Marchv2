@@ -1,0 +1,243 @@
+const flip = document.getElementById("flip");
+const flipInner = document.getElementById("flipInner");
+const flipBtn = document.getElementById("flipBtn");
+const backBtn = document.getElementById("backBtn");
+
+const fx = document.getElementById("fx");
+
+const noteImg = document.getElementById("noteImg");
+const notePlaceholder = document.getElementById("notePlaceholder");
+const downloadBtn = document.getElementById("downloadBtn");
+
+// ✅ SET THIS LATER when you upload your handwritten note image:
+// Example: "assets/handnote.png"
+const NOTE_SRC = ""; // <-- put file path here later
+
+// ----- Flip logic -----
+flipBtn.addEventListener("click", () => {
+  flip.classList.add("isFlipped");
+});
+backBtn.addEventListener("click", () => {
+  flip.classList.remove("isFlipped");
+});
+
+// ----- Note wiring -----
+function wireNote(){
+  if (!NOTE_SRC) {
+    // keep placeholder visible
+    downloadBtn.classList.add("disabled");
+    downloadBtn.href = "#";
+    return;
+  }
+
+  noteImg.src = NOTE_SRC;
+  noteImg.style.display = "block";
+  notePlaceholder.style.display = "none";
+
+  // simple download (same-origin assets)
+  downloadBtn.href = NOTE_SRC;
+  downloadBtn.setAttribute("download", "note.png");
+}
+wireNote();
+
+// ----- Continuous confetti + petals -----
+const confettiColors = [
+  "#FFB6C1","#F8C8DC","#AA336A",
+  "#FFD166","#06D6A0","#118AB2",
+  "#EF476F","#8338EC","#FFBE0B"
+];
+
+function spawnConfettiBurst(){
+  // small burst from random x near top
+  const burstX = Math.random() * window.innerWidth;
+  const count = 12 + Math.floor(Math.random()*10);
+
+  for(let i=0;i<count;i++){
+    const b = document.createElement("div");
+    b.className = "bit";
+    b.style.background = confettiColors[Math.floor(Math.random()*confettiColors.length)];
+    b.style.left = (burstX + (Math.random()*120 - 60)) + "px";
+    b.style.top = (-20) + "px";
+
+    const dur = 1.1 + Math.random()*0.9;
+    b.style.animationDuration = dur + "s";
+
+    // sideways drift via CSS transform in keyframes: we fake it using translateX by setting margin-left-ish (works fine)
+    b.style.transform = `rotate(${Math.random()*180}deg)`;
+
+    fx.appendChild(b);
+    setTimeout(()=> b.remove(), (dur*1000) + 200);
+  }
+}
+
+function spawnPetal(){
+  const p = document.createElement("div");
+  p.className = "petal";
+  p.style.left = (Math.random() * window.innerWidth) + "px";
+  p.style.top = (-80) + "px";
+  const dur = 5.2 + Math.random()*3.2;
+  p.style.animationDuration = dur + "s";
+  p.style.opacity = (0.45 + Math.random()*0.25).toFixed(2);
+
+  fx.appendChild(p);
+  setTimeout(()=> p.remove(), (dur*1000) + 300);
+}
+
+// Timers tuned for “continuous but not chaotic”
+setInterval(spawnConfettiBurst, 520); // confetti loop
+setInterval(spawnPetal, 430);         // petals loop
+
+// ---------------- Lantern DVD Motion + Interactivity ----------------
+(function(){
+  const layer = document.querySelector(".lantern-layer");
+  const lanterns = Array.from(document.querySelectorAll(".lantern-layer .lantern"));
+  if (!layer || !lanterns.length) return;
+
+  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) return;
+
+  // Helper
+  function px(val){
+    const n = parseFloat(val);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  function clamp(v, min, max){
+    return Math.max(min, Math.min(max, v));
+  }
+
+  // Build state from current CSS positions
+  const state = lanterns.map((el) => {
+    const cs = getComputedStyle(el);
+    const layerRect = layer.getBoundingClientRect();
+    const rect = el.getBoundingClientRect();
+
+    const w = rect.width;
+    const h = rect.height;
+
+    let x = px(cs.left);
+    let y = px(cs.top);
+
+    const right = px(cs.right);
+    const bottom = px(cs.bottom);
+
+    // handle right-positioned lanterns
+    if (cs.left === "auto" && cs.right !== "auto") {
+      x = layerRect.width - right - w;
+    }
+
+    // handle bottom-positioned lanterns
+    if (cs.top === "auto" && cs.bottom !== "auto") {
+      y = layerRect.height - bottom - h;
+    }
+
+    // fallback to actual rendered position
+    if (!Number.isFinite(x) || !Number.isFinite(y)) {
+      x = rect.left - layerRect.left;
+      y = rect.top - layerRect.top;
+    }
+
+    const speed = 28 + Math.random() * 22;
+    const angle = Math.random() * Math.PI * 2;
+
+    // freeze current position into inline styles so motion is fully JS controlled
+    el.style.left = x + "px";
+    el.style.top = y + "px";
+    el.style.right = "auto";
+    el.style.bottom = "auto";
+
+    // reset translation vars
+    el.style.setProperty("--tx", "0px");
+    el.style.setProperty("--ty", "0px");
+
+    return {
+      el,
+      x,
+      y,
+      w,
+      h,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      rot: (Math.random() * 8 - 4),
+      rv: (Math.random() * 0.8 - 0.4),
+      rotMax: 10
+    };
+  });
+
+  // Tap to focus / unfocus
+  lanterns.forEach(el => {
+    el.addEventListener("click", () => {
+      const is = el.classList.toggle("isFocus");
+
+      if (is) {
+        lanterns.forEach(other => {
+          if (other !== el) other.classList.remove("isFocus");
+        });
+      }
+    }, { passive: true });
+  });
+
+  let last = performance.now();
+
+  function tick(now){
+    const dt = Math.min(0.033, (now - last) / 1000);
+    last = now;
+
+    const W = layer.clientWidth;
+    const H = layer.clientHeight;
+
+    for (const s of state) {
+      s.x += s.vx * dt;
+      s.y += s.vy * dt;
+
+      // bounce off left/right
+      if (s.x <= 0) {
+        s.x = 0;
+        s.vx = Math.abs(s.vx);
+      } else if (s.x + s.w >= W) {
+        s.x = W - s.w;
+        s.vx = -Math.abs(s.vx);
+      }
+
+      // bounce off top/bottom
+      if (s.y <= 0) {
+        s.y = 0;
+        s.vy = Math.abs(s.vy);
+      } else if (s.y + s.h >= H) {
+        s.y = H - s.h;
+        s.vy = -Math.abs(s.vy);
+      }
+
+      // subtle rotation drift
+      s.rv = (s.rv + (Math.random() * 2 - 1) * 0.18 * dt) * 0.99;
+      s.rot += s.rv;
+      s.rot = clamp(s.rot, -s.rotMax, s.rotMax);
+
+      s.el.style.left = s.x.toFixed(2) + "px";
+      s.el.style.top = s.y.toFixed(2) + "px";
+      s.el.style.setProperty("--rot", s.rot.toFixed(2) + "deg");
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  requestAnimationFrame(tick);
+
+  // Keep lanterns inside bounds on resize / orientation change
+  window.addEventListener("resize", () => {
+    const W = layer.clientWidth;
+    const H = layer.clientHeight;
+
+    state.forEach((s) => {
+      const rect = s.el.getBoundingClientRect();
+      s.w = rect.width;
+      s.h = rect.height;
+
+      s.x = clamp(s.x, 0, Math.max(0, W - s.w));
+      s.y = clamp(s.y, 0, Math.max(0, H - s.h));
+
+      s.el.style.left = s.x + "px";
+      s.el.style.top = s.y + "px";
+    });
+  }, { passive: true });
+})();
