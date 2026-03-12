@@ -324,6 +324,20 @@ body{
   object-fit: contain;
   transform: translateZ(0);
   filter: drop-shadow(0 6px 10px rgba(0,0,0,.14)) contrast(1.03) saturate(1.05);
+
+  /* soft fade into lantern edges */
+  -webkit-mask-image: radial-gradient(circle at center,
+    rgba(0,0,0,1) 58%,
+    rgba(0,0,0,.92) 68%,
+    rgba(0,0,0,.55) 80%,
+    rgba(0,0,0,.18) 90%,
+    rgba(0,0,0,0) 100%);
+  mask-image: radial-gradient(circle at center,
+    rgba(0,0,0,1) 58%,
+    rgba(0,0,0,.92) 68%,
+    rgba(0,0,0,.55) 80%,
+    rgba(0,0,0,.18) 90%,
+    rgba(0,0,0,0) 100%);
 }
 
 .lantern .frame{
