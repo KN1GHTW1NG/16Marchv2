@@ -50,19 +50,19 @@ const confettiColors = [
 function spawnConfettiBurst(){
   // small burst from random x near top
   const burstX = Math.random() * window.innerWidth;
-  const count = 12 + Math.floor(Math.random()*10);
+
+  // ✅ reduced count for Safari performance
+  const count = 5 + Math.floor(Math.random() * 4);
 
   for(let i=0;i<count;i++){
     const b = document.createElement("div");
     b.className = "bit";
     b.style.background = confettiColors[Math.floor(Math.random()*confettiColors.length)];
-    b.style.left = (burstX + (Math.random()*120 - 60)) + "px";
-    b.style.top = (-20) + "px";
+    b.style.left = (burstX + (Math.random()*100 - 50)) + "px";
+    b.style.top = "-20px";
 
-    const dur = 1.1 + Math.random()*0.9;
+    const dur = 1.2 + Math.random()*0.7;
     b.style.animationDuration = dur + "s";
-
-    // sideways drift via CSS transform in keyframes: we fake it using translateX by setting margin-left-ish (works fine)
     b.style.transform = `rotate(${Math.random()*180}deg)`;
 
     fx.appendChild(b);
@@ -74,18 +74,19 @@ function spawnPetal(){
   const p = document.createElement("div");
   p.className = "petal";
   p.style.left = (Math.random() * window.innerWidth) + "px";
-  p.style.top = (-80) + "px";
-  const dur = 5.2 + Math.random()*3.2;
+  p.style.top = "-80px";
+
+  const dur = 6 + Math.random()*2.5;
   p.style.animationDuration = dur + "s";
-  p.style.opacity = (0.45 + Math.random()*0.25).toFixed(2);
+  p.style.opacity = (0.40 + Math.random()*0.18).toFixed(2);
 
   fx.appendChild(p);
   setTimeout(()=> p.remove(), (dur*1000) + 300);
 }
 
-// Timers tuned for “continuous but not chaotic”
-setInterval(spawnConfettiBurst, 520); // confetti loop
-setInterval(spawnPetal, 430);         // petals loop
+// ✅ reduced spawn frequency for Safari
+const confettiTimer = setInterval(spawnConfettiBurst, 1200);
+const petalTimer = setInterval(spawnPetal, 900);
 
 // ---------------- Lantern DVD Motion + Interactivity ----------------
 (function(){
@@ -95,6 +96,8 @@ setInterval(spawnPetal, 430);         // petals loop
 
   const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduce) return;
+
+  let isPaused = false;
 
   // Helper
   function px(val){
@@ -137,7 +140,8 @@ setInterval(spawnPetal, 430);         // petals loop
       y = rect.top - layerRect.top;
     }
 
-    const speed = 28 + Math.random() * 22;
+    // ✅ slower speed for Safari smoothness
+    const speed = 12 + Math.random() * 10;
     const angle = Math.random() * Math.PI * 2;
 
     // freeze current position into inline styles so motion is fully JS controlled
@@ -158,9 +162,9 @@ setInterval(spawnPetal, 430);         // petals loop
       h,
       vx: Math.cos(angle) * speed,
       vy: Math.sin(angle) * speed,
-      rot: (Math.random() * 8 - 4),
-      rv: (Math.random() * 0.8 - 0.4),
-      rotMax: 10
+      rot: (Math.random() * 6 - 3),
+      rv: (Math.random() * 0.35 - 0.175),
+      rotMax: 6
     };
   });
 
@@ -180,7 +184,13 @@ setInterval(spawnPetal, 430);         // petals loop
   let last = performance.now();
 
   function tick(now){
-    const dt = Math.min(0.033, (now - last) / 1000);
+    if (isPaused) {
+      last = now;
+      requestAnimationFrame(tick);
+      return;
+    }
+
+    const dt = Math.min(0.025, (now - last) / 1000);
     last = now;
 
     const W = layer.clientWidth;
@@ -208,8 +218,8 @@ setInterval(spawnPetal, 430);         // petals loop
         s.vy = -Math.abs(s.vy);
       }
 
-      // subtle rotation drift
-      s.rv = (s.rv + (Math.random() * 2 - 1) * 0.18 * dt) * 0.99;
+      // ✅ softer rotation drift
+      s.rv = (s.rv + (Math.random() * 2 - 1) * 0.08 * dt) * 0.992;
       s.rot += s.rv;
       s.rot = clamp(s.rot, -s.rotMax, s.rotMax);
 
@@ -240,4 +250,9 @@ setInterval(spawnPetal, 430);         // petals loop
       s.el.style.top = s.y + "px";
     });
   }, { passive: true });
+
+  // ✅ pause animation when page is hidden
+  document.addEventListener("visibilitychange", () => {
+    isPaused = document.hidden;
+  });
 })();
