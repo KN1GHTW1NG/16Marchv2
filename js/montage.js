@@ -1,258 +1,196 @@
-const flip = document.getElementById("flip");
-const flipInner = document.getElementById("flipInner");
-const flipBtn = document.getElementById("flipBtn");
-const backBtn = document.getElementById("backBtn");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Happy Birthday ✨</title>
 
-const fx = document.getElementById("fx");
+  <link rel="stylesheet" href="css/montage.css?v=1" />
+  <script src="js/montage.js?v=1" defer></script>
+</head>
+<body>
 
-const noteImg = document.getElementById("noteImg");
-const notePlaceholder = document.getElementById("notePlaceholder");
-const downloadBtn = document.getElementById("downloadBtn");
+  <div class="page" id="page">
+    <!-- Floating header -->
+    <header class="top">
+      <h1 class="title">Happy Birthday 🎉</h1>
+      <p class="subtitle">A little world I built for you — one tap at a time.</p>
+    </header>
 
-// ✅ SET THIS LATER when you upload your handwritten note image:
-// Example: "assets/handnote.png"
-const NOTE_SRC = ""; // <-- put file path here later
+    <!-- Floating lanterns -->
+    <div class="lantern-layer" aria-hidden="true">
+      <!-- Photo lanterns -->
+      <div class="lantern photo L1">
+        <div class="sparkles">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="glow"></div>
+        <img class="photo" src="assets/IMG_2170.png" alt="">
+        <div class="frame"></div>
+      </div>
 
-// ----- Flip logic -----
-flipBtn.addEventListener("click", () => {
-  flip.classList.add("isFlipped");
-});
-backBtn.addEventListener("click", () => {
-  flip.classList.remove("isFlipped");
-});
+      <div class="lantern photo L2">
+        <div class="sparkles">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="glow"></div>
+        <img class="photo" src="assets/IMG_2171.png" alt="">
+        <div class="frame"></div>
+      </div>
 
-// ----- Note wiring -----
-function wireNote(){
-  if (!NOTE_SRC) {
-    // keep placeholder visible
-    downloadBtn.classList.add("disabled");
-    downloadBtn.href = "#";
-    return;
-  }
+      <div class="lantern photo L3">
+        <div class="sparkles">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="glow"></div>
+        <img class="photo" src="assets/IMG_2172.png" alt="">
+        <div class="frame"></div>
+      </div>
 
-  noteImg.src = NOTE_SRC;
-  noteImg.style.display = "block";
-  notePlaceholder.style.display = "none";
+      <div class="lantern photo L4">
+        <div class="sparkles">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="glow"></div>
+        <img class="photo" src="assets/IMG_2170.png" alt="">
+        <div class="frame"></div>
+      </div>
 
-  // simple download (same-origin assets)
-  downloadBtn.href = NOTE_SRC;
-  downloadBtn.setAttribute("download", "note.png");
-}
-wireNote();
+      <div class="lantern photo L5">
+        <div class="sparkles">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="glow"></div>
+        <img class="photo" src="assets/IMG_2171.png" alt="">
+        <div class="frame"></div>
+      </div>
 
-// ----- Continuous confetti + petals -----
-const confettiColors = [
-  "#FFB6C1","#F8C8DC","#AA336A",
-  "#FFD166","#06D6A0","#118AB2",
-  "#EF476F","#8338EC","#FFBE0B"
-];
+      <div class="lantern photo L6">
+        <div class="sparkles">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="glow"></div>
+        <img class="photo" src="assets/IMG_2172.png" alt="">
+        <div class="frame"></div>
+      </div>
 
-function spawnConfettiBurst(){
-  // small burst from random x near top
-  const burstX = Math.random() * window.innerWidth;
+      <div class="lantern photo L7">
+        <div class="sparkles">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="glow"></div>
+        <img class="photo" src="assets/IMG_2170.png" alt="">
+        <div class="frame"></div>
+      </div>
 
-  // ✅ reduced count for Safari performance
-  const count = 5 + Math.floor(Math.random() * 4);
+      <div class="lantern photo L8">
+        <div class="sparkles">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="glow"></div>
+        <img class="photo" src="assets/IMG_2171.png" alt="">
+        <div class="frame"></div>
+      </div>
+    </div>
 
-  for(let i=0;i<count;i++){
-    const b = document.createElement("div");
-    b.className = "bit";
-    b.style.background = confettiColors[Math.floor(Math.random()*confettiColors.length)];
-    b.style.left = (burstX + (Math.random()*100 - 50)) + "px";
-    b.style.top = "-20px";
+    <!-- Main flipping card -->
+    <main class="center">
+      <section class="flip" id="flip">
+        <div class="flip-inner" id="flipInner">
 
-    const dur = 1.2 + Math.random()*0.7;
-    b.style.animationDuration = dur + "s";
-    b.style.transform = `rotate(${Math.random()*180}deg)`;
+          <!-- FRONT -->
+          <div class="face front">
+            <div class="card">
+              <div class="card-top">
+                <div class="badge">You made it 🌙</div>
+                <h2>Good. You’re here.</h2>
+                <p class="lead">
+                  You’ve already done the hardest part —
+                  showing up and trusting the next tap.
+                </p>
+              </div>
 
-    fx.appendChild(b);
-    setTimeout(()=> b.remove(), (dur*1000) + 200);
-  }
-}
+              <div class="card-msg">
+                <p>
+                  I’m sorry I couldn’t get you something “normal”.
+                  So I tried to build something that feels like a moment —
+                  a small proof that you matter, and that your day matters.
+                </p>
+                <p class="soft">
+                  Tap below to flip the note.
+                </p>
+              </div>
 
-function spawnPetal(){
-  const p = document.createElement("div");
-  p.className = "petal";
-  p.style.left = (Math.random() * window.innerWidth) + "px";
-  p.style.top = "-80px";
+              <button class="btn primary" id="flipBtn">Tap to flip 💌</button>
+            </div>
+          </div>
 
-  const dur = 6 + Math.random()*2.5;
-  p.style.animationDuration = dur + "s";
-  p.style.opacity = (0.40 + Math.random()*0.18).toFixed(2);
+          <!-- BACK -->
+          <div class="face back">
+            <div class="card">
+              <div class="card-top">
+                <div class="badge pink">The note ✨</div>
+                <h2>Keep this.</h2>
+                <p class="lead">
+                  A small page… but meant to last longer than a page.
+                </p>
+              </div>
 
-  fx.appendChild(p);
-  setTimeout(()=> p.remove(), (dur*1000) + 300);
-}
+              <div class="noteFrame">
+                <div class="noteScroll" id="noteScroll">
+                  <img class="notePage" src="assets/note1.jpg" alt="Letter page 1">
+                  <img class="notePage" src="assets/note2.jpg" alt="Letter page 2">
+                  <img class="notePage" src="assets/note3.jpg" alt="Letter page 3">
+                </div>
 
-// ✅ reduced spawn frequency for Safari
-const confettiTimer = setInterval(spawnConfettiBurst, 1200);
-const petalTimer = setInterval(spawnPetal, 900);
+                <span class="corner c1"></span>
+                <span class="corner c2"></span>
+                <span class="corner c3"></span>
+                <span class="corner c4"></span>
+              </div>
 
-// ---------------- Lantern DVD Motion + Interactivity ----------------
-(function(){
-  const layer = document.querySelector(".lantern-layer");
-  const lanterns = Array.from(document.querySelectorAll(".lantern-layer .lantern"));
-  if (!layer || !lanterns.length) return;
+              <div class="row">
+                <button class="btn ghost" id="backBtn">Flip back</button>
+                <a class="btn primary" id="downloadBtn" href="assets/note.pdf" download="note.pdf">Keep this letter 📜</a>
+              </div>
 
-  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduce) return;
+              <p class="tiny">
+                Scroll inside the note to keep reading.
+              </p>
+            </div>
+          </div>
 
-  let isPaused = false;
+        </div>
+      </section>
+    </main>
 
-  // Helper
-  function px(val){
-    const n = parseFloat(val);
-    return Number.isFinite(n) ? n : 0;
-  }
+    <!-- Confetti / petals / sparkle FX -->
+    <div class="fx" id="fx" aria-hidden="true"></div>
+  </div>
 
-  function clamp(v, min, max){
-    return Math.max(min, Math.min(max, v));
-  }
-
-  // Build state from current CSS positions
-  const state = lanterns.map((el) => {
-    const cs = getComputedStyle(el);
-    const layerRect = layer.getBoundingClientRect();
-    const rect = el.getBoundingClientRect();
-
-    const w = rect.width;
-    const h = rect.height;
-
-    let x = px(cs.left);
-    let y = px(cs.top);
-
-    const right = px(cs.right);
-    const bottom = px(cs.bottom);
-
-    // handle right-positioned lanterns
-    if (cs.left === "auto" && cs.right !== "auto") {
-      x = layerRect.width - right - w;
-    }
-
-    // handle bottom-positioned lanterns
-    if (cs.top === "auto" && cs.bottom !== "auto") {
-      y = layerRect.height - bottom - h;
-    }
-
-    // fallback to actual rendered position
-    if (!Number.isFinite(x) || !Number.isFinite(y)) {
-      x = rect.left - layerRect.left;
-      y = rect.top - layerRect.top;
-    }
-
-    // ✅ slower speed for Safari smoothness
-    const speed = 12 + Math.random() * 10;
-    const angle = Math.random() * Math.PI * 2;
-
-    // freeze current position into inline styles so motion is fully JS controlled
-    el.style.left = x + "px";
-    el.style.top = y + "px";
-    el.style.right = "auto";
-    el.style.bottom = "auto";
-
-    // reset translation vars
-    el.style.setProperty("--tx", "0px");
-    el.style.setProperty("--ty", "0px");
-
-    return {
-      el,
-      x,
-      y,
-      w,
-      h,
-      vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed,
-      rot: (Math.random() * 6 - 3),
-      rv: (Math.random() * 0.35 - 0.175),
-      rotMax: 6
-    };
-  });
-
-  // Tap to focus / unfocus
-  lanterns.forEach(el => {
-    el.addEventListener("click", () => {
-      const is = el.classList.toggle("isFocus");
-
-      if (is) {
-        lanterns.forEach(other => {
-          if (other !== el) other.classList.remove("isFocus");
-        });
-      }
-    }, { passive: true });
-  });
-
-  let last = performance.now();
-
-  function tick(now){
-    if (isPaused) {
-      last = now;
-      requestAnimationFrame(tick);
-      return;
-    }
-
-    const dt = Math.min(0.025, (now - last) / 1000);
-    last = now;
-
-    const W = layer.clientWidth;
-    const H = layer.clientHeight;
-
-    for (const s of state) {
-      s.x += s.vx * dt;
-      s.y += s.vy * dt;
-
-      // bounce off left/right
-      if (s.x <= 0) {
-        s.x = 0;
-        s.vx = Math.abs(s.vx);
-      } else if (s.x + s.w >= W) {
-        s.x = W - s.w;
-        s.vx = -Math.abs(s.vx);
-      }
-
-      // bounce off top/bottom
-      if (s.y <= 0) {
-        s.y = 0;
-        s.vy = Math.abs(s.vy);
-      } else if (s.y + s.h >= H) {
-        s.y = H - s.h;
-        s.vy = -Math.abs(s.vy);
-      }
-
-      // ✅ softer rotation drift
-      s.rv = (s.rv + (Math.random() * 2 - 1) * 0.08 * dt) * 0.992;
-      s.rot += s.rv;
-      s.rot = clamp(s.rot, -s.rotMax, s.rotMax);
-
-      s.el.style.left = s.x.toFixed(2) + "px";
-      s.el.style.top = s.y.toFixed(2) + "px";
-      s.el.style.setProperty("--rot", s.rot.toFixed(2) + "deg");
-    }
-
-    requestAnimationFrame(tick);
-  }
-
-  requestAnimationFrame(tick);
-
-  // Keep lanterns inside bounds on resize / orientation change
-  window.addEventListener("resize", () => {
-    const W = layer.clientWidth;
-    const H = layer.clientHeight;
-
-    state.forEach((s) => {
-      const rect = s.el.getBoundingClientRect();
-      s.w = rect.width;
-      s.h = rect.height;
-
-      s.x = clamp(s.x, 0, Math.max(0, W - s.w));
-      s.y = clamp(s.y, 0, Math.max(0, H - s.h));
-
-      s.el.style.left = s.x + "px";
-      s.el.style.top = s.y + "px";
-    });
-  }, { passive: true });
-
-  // ✅ pause animation when page is hidden
-  document.addEventListener("visibilitychange", () => {
-    isPaused = document.hidden;
-  });
-})();
+</body>
+</html>
