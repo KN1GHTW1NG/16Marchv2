@@ -1,515 +1,196 @@
-:root{
-  --pink1:#FFB6C1;
-  --pink2:#F8C8DC;
-  --pink3:#AA336A;
-  --ink:#1e1f22;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Happy Birthday ✨</title>
 
-  --shadow: 0 18px 45px rgba(0,0,0,.18);
-  --soft:   0 10px 25px rgba(0,0,0,.12);
-  --pill: 9999px;
+  <link rel="stylesheet" href="css/montage.css?v=1" />
+  <script src="js/montage.js?v=1" defer></script>
+</head>
+<body>
 
-  --maxW: 520px;
-}
+  <div class="page" id="page">
+    <!-- Floating header -->
+    <header class="top">
+      <h1 class="title">Happy Birthday 🎉</h1>
+      <p class="subtitle">A little world I built for you — one tap at a time.</p>
+    </header>
 
-*{ box-sizing:border-box; }
-html,body{ margin:0; height:100%; }
-body{
-  font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial;
-  color: var(--ink);
-  background: linear-gradient(180deg, #fff, var(--pink2), var(--pink1));
-  overflow-x:hidden;
-}
+    <!-- Floating lanterns -->
+    <div class="lantern-layer" aria-hidden="true">
+      <!-- Photo lanterns -->
+      <div class="lantern photo L1">
+        <div class="sparkles">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="glow"></div>
+        <img class="photo" src="assets/IMG_2170.png" alt="">
+        <div class="frame"></div>
+      </div>
 
-.page{
-  min-height: 100svh;
-  max-width: var(--maxW);
-  margin: 0 auto;
-  padding: 14px 14px 18px;
-  position: relative;
-}
+      <div class="lantern photo L2">
+        <div class="sparkles">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="glow"></div>
+        <img class="photo" src="assets/IMG_2171.png" alt="">
+        <div class="frame"></div>
+      </div>
 
-/* ---------- Header ---------- */
-.top{
-  text-align:center;
-  margin-top: 6px;
-  position: relative;
-  z-index: 20;
-}
-.title{
-  margin: 0;
-  font-size: 30px;
-  font-weight: 950;
-  letter-spacing: -.02em;
-  text-shadow: 0 10px 26px rgba(0,0,0,.12);
-}
-.subtitle{
-  margin: 6px 0 0;
-  font-size: 13px;
-  font-weight: 700;
-  color: rgba(30,31,34,.70);
-}
+      <div class="lantern photo L3">
+        <div class="sparkles">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="glow"></div>
+        <img class="photo" src="assets/IMG_2172.png" alt="">
+        <div class="frame"></div>
+      </div>
 
-@keyframes floatTitle{
-  0%{ transform: translateY(0); }
-  50%{ transform: translateY(-8px); }
-  100%{ transform: translateY(0); }
-}
+      <div class="lantern photo L4">
+        <div class="sparkles">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="glow"></div>
+        <img class="photo" src="assets/IMG_2170.png" alt="">
+        <div class="frame"></div>
+      </div>
 
-/* ---------- Center card ---------- */
-.center{
-  margin-top: 14px;
-  display:flex;
-  justify-content:center;
-  position: relative;
-  z-index: 20;
-}
+      <div class="lantern photo L5">
+        <div class="sparkles">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="glow"></div>
+        <img class="photo" src="assets/IMG_2171.png" alt="">
+        <div class="frame"></div>
+      </div>
 
-/* Flip container */
-.flip{
-  width: 100%;
-  perspective: 1200px;
-}
-.flip-inner{
-  width: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 700ms cubic-bezier(.2,.9,.2,1);
-}
-.flip.isFlipped .flip-inner{
-  transform: rotateY(180deg);
-}
-.face{
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  position: absolute;
-  inset: 0;
-}
-.face.back{
-  transform: rotateY(180deg);
-}
-.flip-inner, .face{
-  min-height: 540px;
-}
+      <div class="lantern photo L6">
+        <div class="sparkles">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="glow"></div>
+        <img class="photo" src="assets/IMG_2172.png" alt="">
+        <div class="frame"></div>
+      </div>
 
-/* Card */
-.card{
-  background: rgba(255,255,255,.92);
-  border: 1px solid rgba(0,0,0,.06);
-  border-radius: 18px;
-  box-shadow: var(--soft);
-  padding: 16px;
-  text-align: center;
-  position: relative;
-  overflow:hidden;
-}
+      <div class="lantern photo L7">
+        <div class="sparkles">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="glow"></div>
+        <img class="photo" src="assets/IMG_2170.png" alt="">
+        <div class="frame"></div>
+      </div>
 
-.card-top{
-  margin-bottom: 10px;
-}
-.badge{
-  display:inline-block;
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-weight: 900;
-  font-size: 12px;
-  background: rgba(0,0,0,.06);
-  color: rgba(30,31,34,.72);
-  margin-bottom: 8px;
-}
-.badge.pink{
-  background: rgba(255,182,193,.42);
-  border: 1px solid rgba(170,51,106,.18);
-  color: rgba(120,18,65,.9);
-}
-.card h2{
-  margin: 0;
-  font-size: 22px;
-  font-weight: 950;
-  letter-spacing: -.02em;
-}
-.lead{
-  margin: 8px 0 0;
-  font-weight: 750;
-  color: rgba(30,31,34,.70);
-  font-size: 13px;
-  line-height: 1.35;
-}
+      <div class="lantern photo L8">
+        <div class="sparkles">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="glow"></div>
+        <img class="photo" src="assets/IMG_2171.png" alt="">
+        <div class="frame"></div>
+      </div>
+    </div>
 
-.card-msg{
-  margin-top: 14px;
-  text-align: left;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1.55;
-  color: rgba(30,31,34,.85);
-}
-.card-msg p{ margin: 0 0 10px; }
-.card-msg .soft{
-  color: rgba(30,31,34,.60);
-  font-weight: 750;
-}
+    <!-- Main flipping card -->
+    <main class="center">
+      <section class="flip" id="flip">
+        <div class="flip-inner" id="flipInner">
 
-.row{
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  flex-wrap:wrap;
-  margin-top: 12px;
-}
-.btn{
-  height: 46px;
-  min-width: 150px;
-  padding: 0 14px;
-  border-radius: var(--pill);
-  border: 1px solid rgba(0,0,0,.10);
-  background: rgba(255,255,255,.95);
-  box-shadow: 0 12px 22px rgba(0,0,0,.12);
-  font-weight: 950;
-  cursor:pointer;
-  user-select:none;
-  -webkit-user-select:none;
-  -webkit-touch-callout:none;
-  -webkit-tap-highlight-color: transparent;
-}
-.btn:active{ transform: translateY(2px); }
-.btn.primary{
-  border: 0;
-  color:#fff;
-  background: linear-gradient(180deg, var(--pink3), #8f2c5b);
-  box-shadow: 0 14px 28px rgba(0,0,0,.16);
-}
-.btn.ghost{
-  background: rgba(255,255,255,.90);
-}
-.tiny{
-  margin: 10px 0 0;
-  font-size: 12px;
-  font-weight: 750;
-  color: rgba(30,31,34,.55);
-}
+          <!-- FRONT -->
+          <div class="face front">
+            <div class="card">
+              <div class="card-top">
+                <div class="badge">You made it 🌙</div>
+                <h2>Good. You’re here.</h2>
+                <p class="lead">
+                  You’ve already done the hardest part —
+                  showing up and trusting the next tap.
+                </p>
+              </div>
 
-/* ---------- Note frame (9:16) ---------- */
-.noteFrame{
-  width: min(360px, 92%);
-  margin: 14px auto 0;
-  aspect-ratio: 9 / 16;
-  border-radius: 18px;
-  position: relative;
-  background:
-    radial-gradient(120% 80% at 50% 10%, rgba(255,255,255,.95), rgba(255,255,255,.72)),
-    linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,.55));
-  border: 1px solid rgba(0,0,0,.08);
-  box-shadow: var(--shadow);
-  overflow:hidden;
-}
+              <div class="card-msg">
+                <p>
+                  I’m sorry I couldn’t get you something “normal”.
+                  So I tried to build something that feels like a moment —
+                  a small proof that you matter, and that your day matters.
+                </p>
+                <p class="soft">
+                  Tap below to flip the note.
+                </p>
+              </div>
 
-.noteImg{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display:none;
-  background: rgba(255,255,255,.65);
-}
+              <button class="btn primary" id="flipBtn">Tap to flip 💌</button>
+            </div>
+          </div>
 
-.notePlaceholder{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding: 16px;
-  text-align:center;
-  font-weight: 900;
-  color: rgba(30,31,34,.55);
-}
+          <!-- BACK -->
+          <div class="face back">
+            <div class="card">
+              <div class="card-top">
+                <div class="badge pink">The note ✨</div>
+                <h2>Keep this.</h2>
+                <p class="lead">
+                  A small page… but meant to last longer than a page.
+                </p>
+              </div>
 
-/* Decorative corners */
-.corner{
-  position:absolute;
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  border: 2px solid rgba(170,51,106,.28);
-  box-shadow: 0 10px 18px rgba(0,0,0,.08);
-}
-.c1{ top:10px; left:10px; border-right:0; border-bottom:0; }
-.c2{ top:10px; right:10px; border-left:0; border-bottom:0; }
-.c3{ bottom:10px; left:10px; border-right:0; border-top:0; }
-.c4{ bottom:10px; right:10px; border-left:0; border-top:0; }
+              <div class="noteFrame">
+                <div class="noteScroll" id="noteScroll">
+                  <img class="notePage" src="assets/note1.jpg" alt="Letter page 1">
+                  <img class="notePage" src="assets/note2.jpg" alt="Letter page 2">
+                  <img class="notePage" src="assets/note3.jpg" alt="Letter page 3">
+                </div>
 
-/* ---------- Lanterns ---------- */
-.lantern-layer{
-  position: absolute;
-  inset: 0;
-  pointer-events:none;
-  overflow:hidden;
-  z-index: 5;
-}
+                <span class="corner c1"></span>
+                <span class="corner c2"></span>
+                <span class="corner c3"></span>
+                <span class="corner c4"></span>
+              </div>
 
-.lantern{
-  position:absolute;
-  width: 82px;
-  height: 114px;
-  overflow: visible; /* critical so sparkle trail can show */
+              <div class="row">
+                <button class="btn ghost" id="backBtn">Flip back</button>
+                <a class="btn primary" id="downloadBtn" href="assets/note.pdf" download="note.pdf">Keep this letter 📜</a>
+              </div>
 
-  --tx: 0px;
-  --ty: 0px;
-  --rot: 0deg;
-  --scale: 1;
+              <p class="tiny">
+                Scroll inside the note to keep reading.
+              </p>
+            </div>
+          </div>
 
-  transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(var(--scale));
-  will-change: transform;
-  filter: drop-shadow(0 10px 14px rgba(0,0,0,.18));
-  pointer-events: auto;
-  cursor: pointer;
-  animation: lanternFloat 4.4s ease-in-out infinite;
-}
+        </div>
+      </section>
+    </main>
 
-@keyframes lanternFloat{
-  0%{
-    transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(var(--scale));
-  }
-  50%{
-    transform: translate(var(--tx), calc(var(--ty) - 12px)) rotate(calc(var(--rot) + 1deg)) scale(var(--scale));
-  }
-  100%{
-    transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(var(--scale));
-  }
-}
+    <!-- Confetti / petals / sparkle FX -->
+    <div class="fx" id="fx" aria-hidden="true"></div>
+  </div>
 
-.lantern:active{
-  --scale: 0.98;
-}
-
-.lantern.isFocus{
-  z-index: 40;
-  --scale: 1.08;
-  filter: drop-shadow(0 16px 20px rgba(0,0,0,.24));
-}
-
-.lantern::before{
-  content:"";
-  position:absolute;
-  inset: 8px 10px 10px 10px;
-  border-radius: 18px;
-  background: linear-gradient(
-    180deg,
-    rgba(255,255,255,.18),
-    rgba(255,192,203,.08)
-  );
-  border: 1px solid rgba(60,30,20,.18);
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
-}
-
-.lantern .glow{
-  position:absolute;
-  inset: 12px 15px 18px 15px;
-  border-radius: 18px;
-  background: radial-gradient(circle at 50% 35%,
-    rgba(255,238,190,.95),
-    rgba(255,170,120,.42),
-    rgba(255,110,160,.14),
-    rgba(255,255,255,0)
-  );
-  filter: blur(1px);
-  opacity: .95;
-  animation: flicker 2.4s ease-in-out infinite;
-}
-
-.lantern .photo{
-  position:absolute;
-  inset: 18px 18px 28px 18px;
-  width: calc(100% - 36px);
-  height: calc(100% - 46px);
-  object-fit: contain;
-  transform: translateZ(0);
-  filter: drop-shadow(0 6px 10px rgba(0,0,0,.14)) contrast(1.03) saturate(1.05);
-
-  /* soft fade into lantern edges */
-  -webkit-mask-image: radial-gradient(circle at center,
-    rgba(0,0,0,1) 58%,
-    rgba(0,0,0,.92) 68%,
-    rgba(0,0,0,.55) 80%,
-    rgba(0,0,0,.18) 90%,
-    rgba(0,0,0,0) 100%);
-  mask-image: radial-gradient(circle at center,
-    rgba(0,0,0,1) 58%,
-    rgba(0,0,0,.92) 68%,
-    rgba(0,0,0,.55) 80%,
-    rgba(0,0,0,.18) 90%,
-    rgba(0,0,0,0) 100%);
-}
-
-.lantern .frame{
-  position:absolute;
-  inset:0;
-  border-radius: 20px 20px 22px 22px;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,0)),
-    radial-gradient(120% 100% at 50% 10%, rgba(255,255,255,.18), rgba(0,0,0,0));
-  border: 1px solid rgba(20,10,6,.42);
-  box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,.08),
-    inset 0 -8px 12px rgba(0,0,0,.18);
-}
-
-/* elegant sparkle trail under lantern */
-.sparkles{
-  position:absolute;
-  left:50%;
-  bottom:-6px;
-  width:40px;
-  height:60px;
-  transform:translateX(-50%);
-  pointer-events:none;
-  overflow: visible;
-}
-
-.sparkles::before,
-.sparkles::after{
-  content:"";
-  position:absolute;
-  left:50%;
-  bottom:0;
-  width:4px;
-  height:4px;
-  margin-left:-2px;
-  border-radius:50%;
-  background: radial-gradient(circle,
-    rgba(255,255,255,1),
-    rgba(255,220,150,.8),
-    rgba(255,220,150,0)
-  );
-  box-shadow:
-    0 -10px 0 0 rgba(255,245,220,.72),
-    -6px -18px 0 0 rgba(255,214,140,.52),
-    7px -24px 0 0 rgba(255,255,255,.48);
-  animation: sparkleRise 2s linear infinite;
-  opacity:.95;
-}
-
-.sparkles::after{
-  animation-delay: 1s;
-  opacity:.7;
-}
-
-@keyframes sparkleRise{
-  0%{
-    transform: translate(-50%, 0) scale(.8);
-    opacity: 0;
-  }
-  18%{
-    opacity: 1;
-  }
-  100%{
-    transform: translate(-50%, -40px) scale(1.25);
-    opacity: 0;
-  }
-}
-
-@keyframes flicker{
-  0%{ opacity: .86; transform: scale(1); }
-  35%{ opacity: .97; transform: scale(1.015); }
-  65%{ opacity: .80; transform: scale(.99); }
-  100%{ opacity: .9; transform: scale(1); }
-}
-
-/* ---------- Balanced lantern positions ---------- */
-/* kept away from header and card text, evenly distributed */
-
-.L1{
-  left: 12px;
-  top: 120px;
-  width: 70px;
-  height: 98px;
-}
-
-.L2{
-  right: 12px;
-  top: 120px;
-  width: 70px;
-  height: 98px;
-}
-
-.L3{
-  left: 8px;
-  top: 300px;
-  width: 76px;
-  height: 104px;
-}
-
-.L4{
-  right: 8px;
-  top: 300px;
-  width: 76px;
-  height: 104px;
-}
-
-.L5{
-  left: 12px;
-  bottom: 185px;
-  width: 72px;
-  height: 100px;
-}
-
-.L6{
-  right: 12px;
-  bottom: 185px;
-  width: 72px;
-  height: 100px;
-}
-
-.L7{
-  left: 96px;
-  bottom: 48px;
-  width: 74px;
-  height: 102px;
-}
-
-.L8{
-  right: 96px;
-  bottom: 48px;
-  width: 74px;
-  height: 102px;
-}
-
-/* ---------- Confetti + petals layer ---------- */
-.fx{
-  position: fixed;
-  inset: 0;
-  pointer-events:none;
-  overflow:hidden;
-  z-index: 30;
-}
-
-/* confetti bits */
-.bit{
-  position:absolute;
-  width: 8px;
-  height: 14px;
-  border-radius: 3px;
-  opacity: .95;
-  animation: fall 1.4s linear forwards;
-}
-@keyframes fall{
-  0%{ transform: translateY(-20px) rotate(0deg); opacity: 1; }
-  100%{ transform: translateY(110vh) rotate(520deg); opacity: 0; }
-}
-
-/* petals / leaves */
-.petal{
-  position:absolute;
-  width: 14px;
-  height: 10px;
-  border-radius: 999px 999px 999px 0;
-  transform: rotate(35deg);
-  background: linear-gradient(180deg, #ff4d4d, #b00020);
-  opacity: .65;
-  filter: blur(.2px);
-  animation: petalFloat 6.5s linear forwards;
-}
-@keyframes petalFloat{
-  0%{ transform: translateY(-10vh) translateX(0) rotate(20deg); opacity:.0; }
-  10%{ opacity:.65; }
-  100%{ transform: translateY(110vh) translateX(60px) rotate(420deg); opacity:0; }
-}
+</body>
+</html>
